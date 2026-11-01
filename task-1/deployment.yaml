@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: webapp
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+  namespace: webapp
+  labels:
+    name: web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      shareProcessNamespace: true
+      containers:
+        - name: nginx
+          image: nginx:1.27
+          ports:
+            - containerPort: 80
+      initContainers:
+        - name: init-done
+          image: busybox:1.36
+          command: ["/bin/sh", "-c", "echo done"]
+        - name: time-updater
+          image: busybox:1.36
+          restartPolicy: Always
+          securityContext:
+            capabilities:
+              add:
+                - SYS_PTRACE
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "start script....."
+              TARGET_PROC=$(pgrep -o nginx)
+
+              while [ -z "$TARGET_PROC" ]; do 
+                TARGET_PROC=$(pgrep -o nginx)
+                sleep 5
+              done
+
+              while true; do
+                TARGET_PROC=$(pgrep -o nginx)
+                if [ -n "$TARGET_PROC" ]; then
+                    echo "will update....."
+                    echo "<h1> Hello in MLOPS MENA COMMUNITY : $(date +'%Y-%m-%d %H:%M:%S') </h1>" > /proc/$TARGET_PROC/root/usr/share/nginx/html/index.html
+                    echo "Updated....."
+                fi
+                sleep 5
+              done
