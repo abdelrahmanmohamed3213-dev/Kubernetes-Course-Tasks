@@ -14,6 +14,9 @@ spec:
       containers:
       - image:  webapp-api:task2
         name:  webapp-backend
+        envForm:
+          - configMapRef:
+              - name: webapp-config
         livenessProbe:
           httpGet:
             path: /health

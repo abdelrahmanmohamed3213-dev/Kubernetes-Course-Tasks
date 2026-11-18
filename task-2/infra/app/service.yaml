@@ -8,5 +8,5 @@ spec:
   type: ClusterIP
   ports:
   - name:  webapp-api
-    port:  8000
-    targetPort:  8080
+    port:  80
+    targetPort:  8000
