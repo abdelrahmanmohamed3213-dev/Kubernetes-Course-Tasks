@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
+  namespace: webapp-stack
 spec:
   strategy:
     type: Recreate
@@ -17,6 +18,9 @@ spec:
       containers:
       - name: mysql
         image: webapp-mysql:task2
+        envFrom:
+          - secretRef:
+              name: mysql-secret
         livenessProbe:
           initialDelaySeconds: 60
         readinessProbe:

@@ -2,6 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name:  webapp-api
+  namespace: webapp-stack
 spec:
   selector:
     app:  webapp-api

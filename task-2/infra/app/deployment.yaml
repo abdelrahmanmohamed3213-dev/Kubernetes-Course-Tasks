@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name:  webapp-api
+  namespace: webapp-stack
 spec:
   selector:
     matchLabels:
@@ -14,7 +15,7 @@ spec:
       containers:
       - image:  webapp-api:task2
         name:  webapp-backend
-        envForm:
+        envFrom:
           - configMapRef:
               - name: webapp-config
         livenessProbe:
