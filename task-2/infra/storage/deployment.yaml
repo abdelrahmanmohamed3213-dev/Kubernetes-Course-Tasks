@@ -22,6 +22,12 @@ spec:
           - secretRef:
               name: mysql-secret
         livenessProbe:
+          exec:
+            command:
+              - mysqladmin
+              - ping
+              - -h
+              - 127.0.0.1
           initialDelaySeconds: 60
         readinessProbe:
           exec:
