@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name:  webapp-api
+spec:
+  selector:
+    app:  webapp-api
+  type: ClusterIP
+  ports:
+  - name:  webapp-api
+    port:  8000
+    targetPort:  8080
